@@ -10,10 +10,14 @@ import java.text.DecimalFormat;
 public class GeneticaMain {
 
     public static void main(String[] args){
-        CalculadoraGenetica calculadoraGenetica = new CalculadoraGenetica();
-        Double random = calculadoraGenetica.geraNumeroRandomico();
-        System.out.println(random);
-        DecimalFormat df = new DecimalFormat("0.000");
-        System.out.println( df.format(random) );
+//        CalculadoraGenetica calculadoraGenetica = new CalculadoraGenetica();
+//        Double random = calculadoraGenetica.geraNumeroRandomico();
+//        System.out.println(random);
+//        DecimalFormat df = new DecimalFormat("0.000");
+//        System.out.println( df.format(random) );
+
+          AlgoritmoGenetico algoritmoGenetico = new Algoritmo();
+
+          algoritmoGenetico.calculaAlgoritmoGenetico(2,6);
     }
 }
