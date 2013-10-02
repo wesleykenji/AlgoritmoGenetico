@@ -25,8 +25,11 @@ public class CalculadoraGenetica {
 
     }
 
-    public void reproducao(){
-
+    public void reproducao(Genes[] genes){
+        for(int i = 0; i < genes.length; i++){
+            Double valor = this.converteBinarioEmDecimal(genes[i].getGene());
+            System.out.println(valor);
+        }
     }
 
     public void mutacao(){
@@ -47,8 +50,14 @@ public class CalculadoraGenetica {
         //TODO
     }
 
-    public void converteBinarioEmDecimal(String binario){
-        //TODO
+    public Double converteBinarioEmDecimal(String binario){
+        Double valor = new Double(0);
+        // soma ao valor final o dígito binário da posição * 2 elevado ao contador da posição (começa em 0)
+        for (int i = binario.length(); i > 0; i--) {
+            valor += Integer.parseInt( binario.charAt(i-1) + "" ) * Math.pow( 2, (binario.length() - i ) );
+        }
+
+        return valor;
     }
 
 //    public void gerarPopulacao(){

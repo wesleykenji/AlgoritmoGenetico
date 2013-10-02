@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 /**
  * Created with IntelliJ IDEA.
  * User: wesleykenji
@@ -8,23 +10,38 @@
 public class Algoritmo implements AlgoritmoGenetico {
 
     private static String caracteres = "01";
+    private Calculadora calculadora;
 
     @Override
-    public void calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoPopulacao) {
+    public Algoritmo calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoPopulacao, BigDecimal xu, BigDecimal xl) {
+
+        CalculadoraGenetica calculadoraGenetica = new CalculadoraGenetica();
+
         //Criar Populacao
         Populacao populacao = new Populacao(numeroGenes, tamanhoPopulacao);
+/*        for(int i = 0; i < populacao.getIndividuo().length; i++){
+            int contador = i + 1;
+            System.out.println("p" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
+        }*/
         for(int i = 0; i < populacao.getIndividuo().length; i++){
-            System.out.println("p" + i + ":" + populacao.getIndividuo()[i].getIndividuo());
+            //Avaliar Custos
+
+            //Reprodução
+            calculadoraGenetica.reproducao(populacao.getIndividuo()[i].getGenes());
+            //Cruzamento
+
+            //Mutação
+
+            //Teste de convergencia
+
         }
-        //Avaliar Custos
 
-        //Reprodução
+        return this;
+    }
 
-        //Cruzamento
-
-        //Mutação
-
-        //Teste de convergencia
+    public Algoritmo comBaseNoMetodoZero(BigDecimal xu, BigDecimal xl){
+        this.calculadora = new Calculadora(xu,xl);
+        return this;
     }
 
     public static String getCaracteres() {

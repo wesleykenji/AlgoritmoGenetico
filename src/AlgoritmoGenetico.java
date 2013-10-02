@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 /**
  * Created with IntelliJ IDEA.
  * User: wesleykenji
@@ -7,5 +9,5 @@
  */
 public interface AlgoritmoGenetico {
 
-    public void calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoDaPopulacao);
+    public Algoritmo calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoDaPopulacao, BigDecimal xu, BigDecimal xl);
 }

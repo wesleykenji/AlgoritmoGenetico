@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 /**
@@ -18,6 +19,6 @@ public class GeneticaMain {
 
           AlgoritmoGenetico algoritmoGenetico = new Algoritmo();
 
-          algoritmoGenetico.calculaAlgoritmoGenetico(2,6);
+          algoritmoGenetico.calculaAlgoritmoGenetico(2,6,new BigDecimal(10),new BigDecimal(8));
     }
 }

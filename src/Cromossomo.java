@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Random;
 
@@ -49,6 +50,7 @@ public class Cromossomo {
     private String criarGene(Integer tamanho, String caracteres){
         String gene = "";
         Random random = new Random();
+
         for(int i = 0; i < tamanho; i++){
             gene += caracteres.charAt( random.nextInt(2) );
         }
@@ -56,9 +58,30 @@ public class Cromossomo {
         return gene;
     }
 
+    private String criarGene(Integer tamanho, String caracteres, Calculadora calculadora){
+        String gene = "";
+        Random random = new Random();
+
+/*        BigDecimal resultado = calculadora.getXl().add(
+                BigDecimal.valueOf(Math.random()).multiply(
+                    calculadora.getXu().subtract(calculadora.getXl()).divide(BigDecimal.valueOf(Math.pow(2,7))
+                )
+        ));*/
+        for(int i = 0; i < tamanho; i++){
+            gene += caracteres.charAt( random.nextInt(2) );
+        }
+
+        return gene;
+    }
+
+    public Genes[] getGenes() {
+        return genes;
+    }
+
     public String getIndividuo() {
         for(int i = 0; i < this.genes.length; i++){
-           this.individuo += this.genes[i].getGene();
+            this.individuo += this.genes[i].getGene();
+            this.individuo += " ";
         }
 
         return individuo;
