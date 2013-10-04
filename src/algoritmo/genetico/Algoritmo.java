@@ -1,3 +1,8 @@
+package algoritmo.genetico;
+
+import algoritmo.genetico.dominio.Populacao;
+import algoritmo.genetico.dominio.RestricoesLaterais;
+
 import java.math.BigDecimal;
 
 /**
@@ -10,24 +15,24 @@ import java.math.BigDecimal;
 public class Algoritmo implements AlgoritmoGenetico {
 
     private static String caracteres = "01";
-    private Calculadora calculadora;
+    private RestricoesLaterais calculadora;
 
     @Override
-    public Algoritmo calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoPopulacao, BigDecimal xu, BigDecimal xl) {
+    public Algoritmo calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoPopulacao, BigDecimal xu, BigDecimal xl, Integer comprimento) {
 
         CalculadoraGenetica calculadoraGenetica = new CalculadoraGenetica();
 
-        //Criar Populacao
-        Populacao populacao = new Populacao(numeroGenes, tamanhoPopulacao);
-/*        for(int i = 0; i < populacao.getIndividuo().length; i++){
+        //Criar algoritmo.genetico.dominio.Populacao
+        Populacao populacao = new Populacao(numeroGenes, tamanhoPopulacao, comprimento);
+        for(int i = 0; i < populacao.getIndividuo().length; i++){
             int contador = i + 1;
-            System.out.println("p" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
-        }*/
+            System.out.println("C" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
+        }
         for(int i = 0; i < populacao.getIndividuo().length; i++){
             //Avaliar Custos
 
             //Reprodução
-            calculadoraGenetica.reproducao(populacao.getIndividuo()[i].getGenes());
+            calculadoraGenetica.reproducao(populacao.getIndividuo()[i].getGenes(), new RestricoesLaterais(xu, xl), comprimento);
             //Cruzamento
 
             //Mutação
@@ -40,7 +45,7 @@ public class Algoritmo implements AlgoritmoGenetico {
     }
 
     public Algoritmo comBaseNoMetodoZero(BigDecimal xu, BigDecimal xl){
-        this.calculadora = new Calculadora(xu,xl);
+        this.calculadora = new RestricoesLaterais(xu,xl);
         return this;
     }
 

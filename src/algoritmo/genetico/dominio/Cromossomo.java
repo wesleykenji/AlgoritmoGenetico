@@ -1,5 +1,7 @@
-import java.math.BigDecimal;
-import java.util.Map;
+package algoritmo.genetico.dominio;
+
+import algoritmo.genetico.Algoritmo;
+
 import java.util.Random;
 
 /**
@@ -13,10 +15,10 @@ public class Cromossomo {
 
     private Integer numeroGenes;
     private Genes[] genes;
-    private final Integer TAMANHO_INDIVIDUO = 16;
+//    private final Integer TAMANHO_INDIVIDUO = 16;
     private String individuo = "";
 
-    public Cromossomo(Integer numeroGenes) {
+    public Cromossomo(Integer numeroGenes, Integer comprimento) {
         this.numeroGenes = numeroGenes;
         genes = new Genes[numeroGenes];
 
@@ -24,21 +26,21 @@ public class Cromossomo {
         StringBuilder geneString = new StringBuilder();
 
         for(int i =0; i < numeroGenes; i++) {
-            Integer tamanho = TAMANHO_INDIVIDUO / 2;
-            genes[i] = new Genes(tamanho, criarGene(tamanho, caracteres));
+//            Integer tamanho = TAMANHO_INDIVIDUO / 2;
+            genes[i] = new Genes(comprimento, criarGene(comprimento, caracteres));
         }
 
     }
 
-    public Cromossomo(String individuo){
+    public Cromossomo(String individuo, Integer comprimento){
         this.numeroGenes = 2;
         genes = new Genes[numeroGenes];
 
         //Considerando somente para casos onde há 2 genes de 8 bits
-        if(individuo.length() == TAMANHO_INDIVIDUO){
+        if(individuo.length() == comprimento){
 
-            Genes gene = new Genes(TAMANHO_INDIVIDUO/2, individuo.substring(0,7));
-            Genes gene1 = new Genes(TAMANHO_INDIVIDUO/2, individuo.substring(8,15));
+            Genes gene = new Genes(comprimento, individuo.substring(0,7));
+            Genes gene1 = new Genes(comprimento, individuo.substring(8,15));
 
             genes[0] = gene;
             genes[1] = gene1;
@@ -58,13 +60,13 @@ public class Cromossomo {
         return gene;
     }
 
-    private String criarGene(Integer tamanho, String caracteres, Calculadora calculadora){
+    private String criarGene(Integer tamanho, String caracteres, RestricoesLaterais restricoesLaterais){
         String gene = "";
         Random random = new Random();
 
-/*        BigDecimal resultado = calculadora.getXl().add(
+/*        BigDecimal resultado = restricoesLaterais.getXl().add(
                 BigDecimal.valueOf(Math.random()).multiply(
-                    calculadora.getXu().subtract(calculadora.getXl()).divide(BigDecimal.valueOf(Math.pow(2,7))
+                    restricoesLaterais.getXu().subtract(restricoesLaterais.getXl()).divide(BigDecimal.valueOf(Math.pow(2,7))
                 )
         ));*/
         for(int i = 0; i < tamanho; i++){

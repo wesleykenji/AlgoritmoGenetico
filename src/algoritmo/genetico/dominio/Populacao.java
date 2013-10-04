@@ -1,3 +1,5 @@
+package algoritmo.genetico.dominio;
+
 /**
  * Created with IntelliJ IDEA.
  * User: wesleykenji
@@ -10,16 +12,16 @@ public class Populacao {
     private Cromossomo[] individuo;
     private Integer tamanhoDaPopulacao;
 
-    public Populacao(Integer numeroGenes, Integer tamanhoDaPopulacao) {
+    public Populacao(Integer numeroGenes, Integer tamanhoDaPopulacao, Integer comprimento) {
         this.tamanhoDaPopulacao = tamanhoDaPopulacao;
         this.individuo = new Cromossomo[tamanhoDaPopulacao];
 
         for(int i = 0; i < individuo.length; i++){
-            individuo[i] = new Cromossomo(numeroGenes);
+            individuo[i] = new Cromossomo(numeroGenes, comprimento);
         }
     }
 
-//    public Populacao(Integer tamanhoDaPopulacao) {
+//    public algoritmo.genetico.dominio.Populacao(Integer tamanhoDaPopulacao) {
 //        this.tamanhoDaPopulacao = tamanhoDaPopulacao;
 //    }
 
