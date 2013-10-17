@@ -1,3 +1,5 @@
+package algoritmo.genetico.dominio;
+
 /**
  * Created with IntelliJ IDEA.
  * User: wesleykenji
@@ -17,6 +19,10 @@ public class Populacao {
         for(int i = 0; i < individuo.length; i++){
             individuo[i] = new Cromossomo(numeroGenes, comprimento);
         }
+    }
+
+    public Populacao(Cromossomo[] cromossomos){
+        this.individuo = cromossomos;
     }
 
     public Cromossomo[] getIndividuo() {

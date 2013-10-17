@@ -18,6 +18,7 @@ public class Cromossomo {
     private Genes[] genes;
 //    private final Integer TAMANHO_INDIVIDUO = 16;
     private String individuo = "";
+    private Double cromossomoDouble;
 
     public Cromossomo(Integer numeroGenes, Integer comprimento) {
         this.numeroGenes = numeroGenes;
@@ -87,5 +88,13 @@ public class Cromossomo {
 
     public void setIndividuo(String individuo) {
         this.individuo = individuo;
+    }
+
+    public Double getCromossomoDouble() {
+        return cromossomoDouble;
+    }
+
+    public void setCromossomoDouble(Double cromossomoDouble) {
+        this.cromossomoDouble = cromossomoDouble;
     }
 }

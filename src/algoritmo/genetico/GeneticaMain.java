@@ -1,5 +1,7 @@
 package algoritmo.genetico;
 
+import algoritmo.genetico.dominio.Genes;
+
 import java.math.BigDecimal;
 
 /**
@@ -12,6 +14,8 @@ import java.math.BigDecimal;
 public class GeneticaMain {
 
     public static void main(String[] args){
+          //CalculadoraGenetica calculadoraGenetica = new CalculadoraGenetica();
+          //calculadoraGenetica.adaptacao(new BigDecimal[7]);
 
           AlgoritmoGenetico algoritmoGenetico = new Algoritmo();
 
