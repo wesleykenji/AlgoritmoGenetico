@@ -1,3 +1,5 @@
+package algoritmo.genetico.dominio;
+
 import java.math.BigDecimal;
 
 /**
@@ -7,12 +9,12 @@ import java.math.BigDecimal;
  * Time: 09:13
  * To change this template use File | Settings | File Templates.
  */
-public class Calculadora {
+public class RestricoesLaterais {
 
     private BigDecimal xu;
     private BigDecimal xl;
 
-    public Calculadora(BigDecimal xu, BigDecimal xl) {
+    public RestricoesLaterais(BigDecimal xu, BigDecimal xl) {
         this.xl = xl;
         this.xu = xu;
     }

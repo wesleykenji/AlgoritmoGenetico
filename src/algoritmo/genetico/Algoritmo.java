@@ -10,18 +10,18 @@ import java.math.BigDecimal;
 public class Algoritmo implements AlgoritmoGenetico {
 
     private static String caracteres = "01";
-    private Calculadora calculadora;
+    private RestricoesLaterais calculadora;
 
     @Override
-    public Algoritmo calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoPopulacao, BigDecimal xu, BigDecimal xl) {
+    public Algoritmo calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoPopulacao, BigDecimal xu, BigDecimal xl, Integer comprimento) {
 
         CalculadoraGenetica calculadoraGenetica = new CalculadoraGenetica();
 
         //Criar Populacao inicial
-        Populacao populacao = new Populacao(numeroGenes, tamanhoPopulacao);
+        Populacao populacao = new Populacao(numeroGenes, tamanhoPopulacao, comprimento);
         for(int i = 0; i < populacao.getIndividuo().length; i++){
             int contador = i + 1;
-            System.out.println("pI" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
+            System.out.println("C" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
         }
 
         /*Populacao populacao = new Populacao(numeroGenes,CalculadoraGenetica.getTotalCromossomos());
@@ -34,10 +34,9 @@ public class Algoritmo implements AlgoritmoGenetico {
             //Avaliar Custos
 
             //Reprodução
-            calculadoraGenetica.reproducao(populacao.getIndividuo()[i].getGenes());
+            calculadoraGenetica.reproducao(populacao.getIndividuo()[i].getGenes(), new RestricoesLaterais(xu, xl), comprimento);
             //Cruzamento e mutação
             calculadoraGenetica.criaCrossoverMutado(populacao);
-
             //Teste de convergencia
 
         }

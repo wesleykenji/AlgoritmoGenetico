@@ -10,12 +10,12 @@ public class Populacao {
     private Cromossomo[] individuo;
     private Integer tamanhoDaPopulacao;
 
-    public Populacao(Integer numeroGenes, Integer tamanhoDaPopulacao) {
+    public Populacao(Integer numeroGenes, Integer tamanhoDaPopulacao, Integer comprimento) {
         this.tamanhoDaPopulacao = tamanhoDaPopulacao;
         this.individuo = new Cromossomo[tamanhoDaPopulacao];
 
         for(int i = 0; i < individuo.length; i++){
-            individuo[i] = new Cromossomo(numeroGenes);
+            individuo[i] = new Cromossomo(numeroGenes, comprimento);
         }
     }
 

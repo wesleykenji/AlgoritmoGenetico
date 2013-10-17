@@ -1,5 +1,13 @@
-import java.util.*;
+package algoritmo.genetico;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import algoritmo.genetico.dominio.Genes;
+import algoritmo.genetico.dominio.RestricoesLaterais;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 /**
  * Created with IntelliJ IDEA.
  * User: wesleykenji
@@ -24,11 +32,27 @@ public class CalculadoraGenetica {
 
     }
 
-    public void reproducao(Genes[] genes){
+    public void reproducao(Genes[] genes, RestricoesLaterais restricoesLaterais, Integer comprimento){
+        String gene = "";
+        String adaptacao = "";
+        BigDecimal[] genesAdaptacao = new BigDecimal[genes.length];
         for(int i = 0; i < genes.length; i++){
             Double valor = this.converteBinarioEmDecimal(genes[i].getGene());
-            System.out.println(valor);
+
+            BigDecimal resultado = calcularCodigoGenetico(restricoesLaterais, comprimento, valor);
+            genesAdaptacao[i] = resultado;
+            gene += valor;
+            gene += " ";
         }
+
+        System.out.println("Cromossomo em Decimal: " + gene);
+        this.adaptacao(genesAdaptacao);
+    }
+
+    private BigDecimal calcularCodigoGenetico(RestricoesLaterais restricoesLaterais, Integer comprimento, Double valor) {
+        return BigDecimal.valueOf(valor).multiply(restricoesLaterais.getXu().subtract(restricoesLaterais.getXl()))
+                .divide(((new BigDecimal(2).pow(comprimento)).subtract(BigDecimal.ONE)), 2, RoundingMode.CEILING)
+                .add(restricoesLaterais.getXl());
     }
 
     public void mutacao(List<Cromossomo> novosCromossomos){
@@ -46,7 +70,23 @@ public class CalculadoraGenetica {
         }
     }
 
-    public void adaptacao(){
+    public void criaCrossoverMutado(Populacao populacao){
+        List<Cromossomo> novosCromossomos = new ArrayList<Cromossomo>();
+        Random random = new Random();
+        
+        this.criaCrossover(populacao, novosCromossomos);
+        //this.mutacao(novosCromossomos);
+    }
+    
+    public void adaptacao(BigDecimal[] genesAdaptacao){
+
+        BigDecimal x = genesAdaptacao[0];
+        BigDecimal y = genesAdaptacao[1];
+        x = x.multiply( BigDecimal.valueOf(Math.sin(4 * x.doubleValue()) )).add(BigDecimal.ONE).;
+        y = BigDecimal.ONE.multiply(
+                y.multiply(BigDecimal.valueOf(Math.sin( 2 * y.doubleValue() )))
+        );
+        //BigDecimal cromossomo = BigDecimal.valueOf(Double.parseDouble(x.toString() + "," + y.toString())).negate();
 
     }
 
@@ -68,14 +108,6 @@ public class CalculadoraGenetica {
         }
 
         return valor;
-    }
-
-    public void criaCrossoverMutado(Populacao populacao){
-        List<Cromossomo> novosCromossomos = new ArrayList<Cromossomo>();
-        Random random = new Random();
-
-        this.criaCrossover(populacao, novosCromossomos);
-        //this.mutacao(novosCromossomos);
     }
 
     private void criaCrossover(Populacao populacao, List<Cromossomo> novosCromossomos) {

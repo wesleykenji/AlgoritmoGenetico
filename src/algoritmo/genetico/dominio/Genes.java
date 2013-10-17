@@ -1,3 +1,5 @@
+package algoritmo.genetico.dominio;
+
 /**
  * Created with IntelliJ IDEA.
  * User: wesleykenji
