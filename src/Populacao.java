@@ -19,10 +19,6 @@ public class Populacao {
         }
     }
 
-//    public Populacao(Integer tamanhoDaPopulacao) {
-//        this.tamanhoDaPopulacao = tamanhoDaPopulacao;
-//    }
-
     public Cromossomo[] getIndividuo() {
         return individuo;
     }

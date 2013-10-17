@@ -62,11 +62,6 @@ public class Cromossomo {
         String gene = "";
         Random random = new Random();
 
-/*        BigDecimal resultado = calculadora.getXl().add(
-                BigDecimal.valueOf(Math.random()).multiply(
-                    calculadora.getXu().subtract(calculadora.getXl()).divide(BigDecimal.valueOf(Math.pow(2,7))
-                )
-        ));*/
         for(int i = 0; i < tamanho; i++){
             gene += caracteres.charAt( random.nextInt(2) );
         }

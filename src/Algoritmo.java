@@ -17,30 +17,31 @@ public class Algoritmo implements AlgoritmoGenetico {
 
         CalculadoraGenetica calculadoraGenetica = new CalculadoraGenetica();
 
-        //Criar Populacao
+        //Criar Populacao inicial
         Populacao populacao = new Populacao(numeroGenes, tamanhoPopulacao);
-/*        for(int i = 0; i < populacao.getIndividuo().length; i++){
+        for(int i = 0; i < populacao.getIndividuo().length; i++){
             int contador = i + 1;
-            System.out.println("p" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
+            System.out.println("pI" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
+        }
+
+        /*Populacao populacao = new Populacao(numeroGenes,CalculadoraGenetica.getTotalCromossomos());
+        for(int i = 0; i < populacaoInicial.getIndividuo().length; i++){
+            int contador = i + 1;
+            System.out.println("pFi" + contador + ":" + populacaoInicial.getIndividuo()[i].getIndividuo());
         }*/
+
         for(int i = 0; i < populacao.getIndividuo().length; i++){
             //Avaliar Custos
 
             //Reprodução
             calculadoraGenetica.reproducao(populacao.getIndividuo()[i].getGenes());
-            //Cruzamento
-
-            //Mutação
+            //Cruzamento e mutação
+            calculadoraGenetica.criaCrossoverMutado(populacao);
 
             //Teste de convergencia
 
         }
 
-        return this;
-    }
-
-    public Algoritmo comBaseNoMetodoZero(BigDecimal xu, BigDecimal xl){
-        this.calculadora = new Calculadora(xu,xl);
         return this;
     }
 
