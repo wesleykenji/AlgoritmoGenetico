@@ -39,7 +39,7 @@ public class GeradorRandomico {
     }
 
     public static Map<Integer, Double> obterCaracterMutacao(Integer totalDeBits) {
-
+        //REFATORAR MAPA
         Map<Integer, Double> listaIndicesMutaveis = new HashMap<Integer, Double>();
 
         for(int i = 0; i < totalDeBits; i++){

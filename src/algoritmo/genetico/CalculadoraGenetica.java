@@ -67,7 +67,6 @@ public class CalculadoraGenetica {
     }
 
     public void mutacao(Populacao populacao, Integer numeroGenes, Integer comprimento){
-        Random random = new Random();
         String caracteres = AlgoritmoUtils.CODIGO_BINARIO;
 
         Integer totalDeBits = calculos.obtemTotalBits(populacao.getTamanhoDaPopulacao(), numeroGenes, comprimento);
