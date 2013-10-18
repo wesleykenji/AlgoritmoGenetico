@@ -1,5 +1,7 @@
 package algoritmo.genetico;
 
+import algoritmo.genetico.dominio.RestricoesLaterais;
+
 import java.math.BigDecimal;
 
 /**
@@ -11,6 +13,5 @@ import java.math.BigDecimal;
  */
 public interface AlgoritmoGenetico {
 
-    public Algoritmo calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoDaPopulacao, BigDecimal xu,
-                                              BigDecimal xl, Integer comprimento);
+    public Algoritmo calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoDaPopulacao, RestricoesLaterais restricoesLaterais, Integer comprimento);
 }

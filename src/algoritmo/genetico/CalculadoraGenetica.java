@@ -6,6 +6,8 @@ import algoritmo.genetico.dominio.Cromossomo;
 import algoritmo.genetico.dominio.Genes;
 import algoritmo.genetico.dominio.Populacao;
 import algoritmo.genetico.dominio.RestricoesLaterais;
+import algoritmo.genetico.util.AlgoritmoUtils;
+import algoritmo.genetico.util.GeradorRandomico;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,11 +21,16 @@ import java.math.RoundingMode;
  */
 public class CalculadoraGenetica {
 
-    private String caracteres = "01";
     private static final int TOTAL_MELHORES = 6;
     private static final int TOTAL_CROSSOVER = 90;
     private static final int TOTAL_CROSSOVER_EXTRA = 1;
     private static final int TOTAL_CROMOSSOMOS = 100;
+
+    private Calculos calculos;
+
+    public CalculadoraGenetica(){
+        this.calculos = new Calculos();
+    }
     /*
     public BigDecimal reproducaoEAdaptacao(Genes[] genes, RestricoesLaterais restricoesLaterais, Integer comprimento){
         String gene = "";
@@ -39,9 +46,9 @@ public class CalculadoraGenetica {
         String gene = "";
 
         for(int i = 0; i < genes.length; i++){
-            Double valor = this.converteBinarioEmDecimal(genes[i].getGene());
+            Double valor = AlgoritmoUtils.converteBinarioEmDecimal(genes[i].getGene());
 
-            BigDecimal resultado = calcularCodigoGenetico(restricoesLaterais, comprimento, valor);
+            BigDecimal resultado = calculos.calcularCodigoGenetico(restricoesLaterais, comprimento, valor);
             genesAdaptacao[i] = resultado;
             gene += valor;
             gene += " ";
@@ -54,51 +61,67 @@ public class CalculadoraGenetica {
 
         BigDecimal x = genesAdaptacao[0];
         BigDecimal y = genesAdaptacao[1];
-        BigDecimal resultado = this.funcaoObjetiva(x, y);
+        BigDecimal resultado = calculos.funcaoObjetiva(x, y);
 
-        return resultado;
+        return resultado.setScale(2, RoundingMode.HALF_EVEN);
     }
 
-    public void mutacao(List<Cromossomo> novosCromossomos){
+    public void mutacao(Populacao populacao, Integer numeroGenes, Integer comprimento){
         Random random = new Random();
+        String caracteres = AlgoritmoUtils.CODIGO_BINARIO;
 
-        for (int i = 0; i < TOTAL_CROSSOVER_EXTRA; i++) {
-            int index = random.nextInt(TOTAL_CROSSOVER) + TOTAL_MELHORES;
-            int posicao = random.nextInt(9);
+        Integer totalDeBits = calculos.obtemTotalBits(populacao.getTamanhoDaPopulacao(), numeroGenes, comprimento);
+        SortedMap<Integer, Double> indicesMutaveis = (SortedMap<Integer, Double>) GeradorRandomico.obterCaracterMutacao(totalDeBits);
+        Integer contador = 0;
+        Integer[] indices = (Integer[]) indicesMutaveis.keySet().toArray();
+        Integer qtdBitsLidos = 0;
 
-            Cromossomo cromossomo = novosCromossomos.get(index);
-            char[] mutacao = cromossomo.getIndividuo().toCharArray();
-            mutacao[posicao] = caracteres.charAt( mutacao[posicao] == caracteres.charAt(0) ? caracteres.charAt(1) : caracteres.charAt(0) );//random.nextInt(10-1)+1;
+        for (int i = 0; i < populacao.getIndividuo().length; i++) {
+            Integer comprimentoIndividuo = populacao.getIndividuo()[i].getIndividuo().length();
+            qtdBitsLidos += comprimentoIndividuo * 2;
+            char[] mutacao = populacao.getIndividuo()[i].getIndividuo().toCharArray();
 
-            novosCromossomos.set(index, cromossomo);
+            if(comprimentoIndividuo > indices[i]){
+                mutacao[indices[i]] = (mutacao[indices[i]] == caracteres.charAt(0) ? caracteres.charAt(1) : caracteres.charAt(0));
+                populacao.getIndividuo()[i].getIndividuo().toCharArray()[indices[i]] = mutacao[indices[i]];
+            }
+
+            if(qtdBitsLidos < indices[i+1]){
+                i++;
+            }
         }
     }
 
-    public BigDecimal[] obtemValorDeMelhorResultado(BigDecimal resultadoAdaptacao, BigDecimal[] resultPopInicial) {
-        //TODO
-        BigDecimal[] resultado = new BigDecimal[resultPopInicial.length];
-        BigDecimal valor = BigDecimal.ZERO;
-        for(int i = 0; i < resultPopInicial.length; i++){
-            resultado[i] = valor.add(resultPopInicial[i].divide(resultadoAdaptacao));
-        }
-
-        return resultado;
-    }
-
-    public void criaCrossoverMutado(Populacao populacao, Integer comprimento, Integer numeroGenes){
+    public Populacao criaCrossoverMutado(Populacao populacao, Integer comprimento, Integer numeroGenes){
         //List<Cromossomo> novosCromossomos = new ArrayList<Cromossomo>();
-        Random random = new Random();
-        List<Integer> index = obterPopulacaoParaCrossOver(this.geraVetorRandomico(populacao.getTamanhoDaPopulacao()), populacao);
-        this.criaCrossover(populacao, this.numeroRandomicoParaRetornoDeK(comprimento, numeroGenes).intValue(), index);
-        this.mutacao(Arrays.asList(populacao.getIndividuo()));
+        List<Integer> index = obterPopulacaoParaCrossOver(GeradorRandomico.geraVetorRandomico(populacao.getTamanhoDaPopulacao()), populacao);
+        this.criaCrossover(populacao, GeradorRandomico.numeroRandomicoParaRetornoDeK(comprimento, numeroGenes).intValue(), index);
+        this.mutacao(populacao, numeroGenes, comprimento);
+
+        return populacao;
     }
 
     private List<Integer> obterPopulacaoParaCrossOver(BigDecimal[] rand, Populacao populacao) {
         List<Integer> index = new ArrayList<Integer>();
-        for(int i = 0; i < populacao.getTamanhoDaPopulacao(); i++){
-            if(rand[i].doubleValue() < populacao.getIndividuo()[i].getCromossomoDouble()){
+        boolean paresNaoDefinidos = true;
+        int tamanho = populacao.getTamanhoDaPopulacao() % 2 == 0 ? populacao.getTamanhoDaPopulacao() : populacao.getTamanhoDaPopulacao() - 1;
+        int i = 0;
+        while(tamanho > i || index.size() % 2 == 1){
+            if(i > tamanho) return index;
+            double numero;
+
+            if(i == tamanho && index.size() % 2 == 1){
+                i--;
+                numero = rand[0].doubleValue();
+            } else {
+                numero = rand[i].doubleValue();
+            }
+
+            if(numero < populacao.getIndividuo()[i].getCromossomoDouble()){
                 index.add(i);
             }
+
+            i++;
         }
 
         return index;
@@ -118,54 +141,20 @@ public class CalculadoraGenetica {
 
     private void geraCrossover(Cromossomo cromossomo, Cromossomo novo, Integer randomK){
 
-        String c1 = cromossomo.getIndividuo().substring(randomK - 1);
-        String c2 = novo.getIndividuo().substring(randomK - 1);
+        String c1 = cromossomo.getIndividuo().substring(randomK);
+        String c2 = novo.getIndividuo().substring(randomK);
 
-        cromossomo.setIndividuo(cromossomo.getIndividuo().substring(0, randomK - 1) + c2);
-        novo.setIndividuo(novo.getIndividuo().substring(0, randomK - 1) + c1);
+        cromossomo.setIndividuo(cromossomo.getIndividuo().substring(0, randomK) + c2);
+        novo.setIndividuo(novo.getIndividuo().substring(0, randomK) + c1);
 
     }
 
-    private BigDecimal calcularCodigoGenetico(RestricoesLaterais restricoesLaterais, Integer comprimento, Double valor) {
-        return BigDecimal.valueOf(valor).multiply(restricoesLaterais.getXu().subtract(restricoesLaterais.getXl()))
-                .divide(((new BigDecimal(2).pow(comprimento)).subtract(BigDecimal.ONE)), 2, RoundingMode.CEILING)
-                .add(restricoesLaterais.getXl());
-    }
-
-    private BigDecimal funcaoObjetiva(BigDecimal x, BigDecimal y){
-        //max g(x, y) = - [x sen (4x) + 1,1 y sen (2y)]
-        return x.multiply( BigDecimal.valueOf(Math.sin(4 * x.doubleValue()) ))
-                .add(new BigDecimal(1.1)
-                        .multiply(y.multiply(
-                                BigDecimal.valueOf(Math.sin(2 * y.doubleValue()))
-                        ))
-                ).negate();
-    }
-
-    private Double converteBinarioEmDecimal(String binario){
-        Double valor = new Double(0);
-        // soma ao valor final o d�gito bin�rio da posi��o * 2 elevado ao contador da posi��o (come�a em 0)
-        for (int i = binario.length() - 1; i >= 0; i--) {
-            valor += Integer.parseInt( binario.charAt(i) + "" ) * Math.pow( 2, ((binario.length() -1) - i ) );
-        }
-
-        return valor;
-    }
-
-    public BigDecimal[] geraVetorRandomico(Integer tamanhoPopulacao){
-        BigDecimal[] vetor = new BigDecimal[tamanhoPopulacao];
-        Random random = new Random();
-        for(int i = 0; i < tamanhoPopulacao; i++){
-            vetor[i] = new BigDecimal(random.nextDouble());
-        }
-
-        return vetor;
-    }
-
-    public Populacao separaMelhores(BigDecimal[] vetorRand, BigDecimal[] probabilidade, Map<BigDecimal, Cromossomo> individuo) {
+    public Populacao separaMelhores(BigDecimal[] vetorRand, BigDecimal resultadoAdaptacao, BigDecimal[] resultPopInicial, Map<Integer, Cromossomo> individuo) {
         //TODO
         int contador = 0;
         Cromossomo[] cromossomos = new Cromossomo[individuo.size()];
+        BigDecimal[] probabilidade = calculos.obtemValorDeMelhorResultado(resultadoAdaptacao, resultPopInicial);
+
         while(vetorRand.length > contador){
             cromossomos[contador] = compareEObtenhaOMelhor(vetorRand[contador], probabilidade, individuo);
             contador++;
@@ -174,7 +163,7 @@ public class CalculadoraGenetica {
         return new Populacao(cromossomos);
     }
 
-    private Cromossomo compareEObtenhaOMelhor(BigDecimal vetorRand, BigDecimal[] probabilidade, Map<BigDecimal, Cromossomo> individuo) {
+    private Cromossomo compareEObtenhaOMelhor(BigDecimal vetorRand, BigDecimal[] probabilidade, Map<Integer, Cromossomo> individuo) {
         int i = 0;
         boolean encontrou = false;
         while(!encontrou){
@@ -188,30 +177,9 @@ public class CalculadoraGenetica {
             }
         }
 
-        return individuo.get(probabilidade[i]);
-    }
+        individuo.get(i).setCromossomoDouble(probabilidade[i].doubleValue());
 
-    public Double numeroRandomicoParaRetornoDeK(Integer comprimento, Integer numeroGenes){
-        Random random = new Random();
-        return 1 + random.nextDouble() * ((comprimento * numeroGenes - 1) - 1);
-    }
-
-    private String converteDecimalEmBinario(BigDecimal decimal) {
-        int resto = -1;
-        StringBuilder sb = new StringBuilder();
-        int valor = decimal.intValue();
-        if (valor == 0) {
-            return "0";
-        }
-
-        // enquanto o resultado da divis�o por 2 for maior que 0 adiciona o resto ao in�cio da String de retorno
-        while (valor > 0) {
-            resto = valor % 2;
-            valor = valor / 2;
-            sb.insert(0, resto);
-        }
-
-        return sb.toString();
+        return individuo.get(i);
     }
 
     public static int getTotalMelhores() {

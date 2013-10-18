@@ -3,6 +3,7 @@ package algoritmo.genetico;
 import algoritmo.genetico.dominio.Cromossomo;
 import algoritmo.genetico.dominio.Populacao;
 import algoritmo.genetico.dominio.RestricoesLaterais;
+import algoritmo.genetico.util.GeradorRandomico;
 
 import java.math.BigDecimal;
 import java.text.Bidi;
@@ -18,11 +19,10 @@ import java.util.Map;
  */
 public class Algoritmo implements AlgoritmoGenetico {
 
-    private static String caracteres = "01";
     private RestricoesLaterais calculadora;
 
     @Override
-    public Algoritmo calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoPopulacao, BigDecimal xu, BigDecimal xl, Integer comprimento) {
+    public Algoritmo calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoPopulacao, RestricoesLaterais restricoesLaterais, Integer comprimento) {
 
         CalculadoraGenetica calculadoraGenetica = new CalculadoraGenetica();
 
@@ -42,37 +42,44 @@ public class Algoritmo implements AlgoritmoGenetico {
 
         BigDecimal resultadoAdaptacao = BigDecimal.ZERO;
         BigDecimal[] resultPopInicial = new BigDecimal[populacaoInicial.getIndividuo().length];
-        Map<BigDecimal, Cromossomo> mapPopulacao = new HashMap<BigDecimal,Cromossomo>();
+        Map<Integer, Cromossomo> mapPopulacao = new HashMap<Integer,Cromossomo>();
 
+        resultadoAdaptacao = reproduzirEAdaptar(restricoesLaterais, comprimento, calculadoraGenetica, populacaoInicial, resultadoAdaptacao, resultPopInicial, mapPopulacao);
+        //System.out.println(resultadoAdaptacao);
+        //Melhores Resultados
+        //BigDecimal[] probabilidade = calculadoraGenetica.obtemValorDeMelhorResultado(resultadoAdaptacao, resultPopInicial);
+        Populacao populacaoNova = calculadoraGenetica.separaMelhores(GeradorRandomico.geraVetorRandomico(tamanhoPopulacao),resultadoAdaptacao, resultPopInicial, mapPopulacao);
+
+        //Cruzamento e mutação
+        populacaoNova = calculadoraGenetica.criaCrossoverMutado(populacaoNova, comprimento, numeroGenes);
+        //Teste de convergencia
+        resultadoAdaptacao = reproduzirEAdaptar(restricoesLaterais, comprimento, calculadoraGenetica, populacaoInicial, resultadoAdaptacao, resultPopInicial, mapPopulacao);
+
+        return this;
+    }
+
+    private BigDecimal reproduzirEAdaptar(RestricoesLaterais restricoesLaterais, Integer comprimento, CalculadoraGenetica calculadoraGenetica, Populacao populacaoInicial, BigDecimal resultadoAdaptacao, BigDecimal[] resultPopInicial, Map<Integer, Cromossomo> mapPopulacao) {
         for(int i = 0; i < populacaoInicial.getIndividuo().length; i++){
             //Avaliar Custos
 
             //Reprodução e adaptação
             //BigDecimal resultado = calculadoraGenetica.reproducaoEAdaptacao(populacao.getIndividuo()[i].getGenes(), new RestricoesLaterais(xu, xl), comprimento));
             BigDecimal[] genesAdaptacao = new BigDecimal[populacaoInicial.getIndividuo()[i].getGenes().length];
-            calculadoraGenetica.reproducao(populacaoInicial.getIndividuo()[i].getGenes(), new RestricoesLaterais(xu, xl), comprimento, genesAdaptacao);
+            String gene = calculadoraGenetica.reproducao(populacaoInicial.getIndividuo()[i].getGenes(), restricoesLaterais, comprimento, genesAdaptacao);
+
+            //System.out.println("Gene após reprodução: " + gene);
+
             resultPopInicial[i] = calculadoraGenetica.adaptacao(genesAdaptacao);
 
-            populacaoInicial.getIndividuo()[i].setCromossomoDouble(resultPopInicial[i].doubleValue());
-            mapPopulacao.put(resultPopInicial[i], populacaoInicial.getIndividuo()[i]);
+            //System.out.println("valor da adaptação: " + resultPopInicial[i]);
 
-            resultadoAdaptacao.add(resultPopInicial[i]);
+            populacaoInicial.getIndividuo()[i].setCromossomoDouble(resultPopInicial[i].doubleValue());
+            mapPopulacao.put(i, populacaoInicial.getIndividuo()[i]);
+
+            resultadoAdaptacao = resultadoAdaptacao.add(resultPopInicial[i]);
         }
 
-        //Melhores Resultados
-        BigDecimal[] probabilidade = calculadoraGenetica.obtemValorDeMelhorResultado(resultadoAdaptacao, resultPopInicial);
-        Populacao populacaoNova = calculadoraGenetica.separaMelhores(calculadoraGenetica.geraVetorRandomico(tamanhoPopulacao),probabilidade, mapPopulacao);
-        //Cruzamento e mutação
-        calculadoraGenetica.criaCrossoverMutado(populacaoInicial, comprimento, numeroGenes);
-        //Teste de convergencia
-        return this;
+        return resultadoAdaptacao;
     }
 
-    public static String getCaracteres() {
-        return caracteres;
-    }
-
-    public static void setCaracteres(String caracteres) {
-        Algoritmo.caracteres = caracteres;
-    }
 }

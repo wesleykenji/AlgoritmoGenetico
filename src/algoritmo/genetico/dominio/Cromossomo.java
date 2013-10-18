@@ -1,6 +1,9 @@
 package algoritmo.genetico.dominio;
 
 import algoritmo.genetico.Algoritmo;
+import algoritmo.genetico.util.AlgoritmoUtils;
+import algoritmo.genetico.util.GeradorRandomico;
+
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Random;
@@ -24,28 +27,24 @@ public class Cromossomo {
         this.numeroGenes = numeroGenes;
         genes = new Genes[numeroGenes];
 
-        String caracteres = Algoritmo.getCaracteres();
         StringBuilder geneString = new StringBuilder();
 
         for(int i =0; i < numeroGenes; i++) {
 //            Integer tamanho = TAMANHO_INDIVIDUO / 2;
-            genes[i] = new Genes(comprimento, criarGene(comprimento, caracteres));
+            genes[i] = new Genes(comprimento, criarGene(comprimento, AlgoritmoUtils.CODIGO_BINARIO));
         }
 
     }
 
-    public Cromossomo(String individuo, Integer comprimento){
-        this.numeroGenes = 2;
+    public Cromossomo(String individuo, Integer comprimento, Integer numeroGenes){
         genes = new Genes[numeroGenes];
+        int posicaoInicial = 0;
+        int posicaoFinal = comprimento;
 
-        //Considerando somente para casos onde há 2 genes de 8 bits
-        if(individuo.length() == comprimento){
-
-            Genes gene = new Genes(comprimento, individuo.substring(0,7));
-            Genes gene1 = new Genes(comprimento, individuo.substring(8,15));
-
-            genes[0] = gene;
-            genes[1] = gene1;
+        for(int i = 0; i < numeroGenes; i++){
+            genes[i] = new Genes(comprimento, individuo.substring(posicaoInicial, posicaoFinal));
+            posicaoInicial += comprimento;
+            posicaoFinal += posicaoInicial;
         }
 
         //TODO aplicar taxa de mutação
@@ -53,21 +52,9 @@ public class Cromossomo {
 
     private String criarGene(Integer tamanho, String caracteres){
         String gene = "";
-        Random random = new Random();
 
         for(int i = 0; i < tamanho; i++){
-            gene += caracteres.charAt( random.nextInt(2) );
-        }
-
-        return gene;
-    }
-
-    private String criarGene(Integer tamanho, String caracteres, RestricoesLaterais restricoesLaterais){
-        String gene = "";
-        Random random = new Random();
-
-        for(int i = 0; i < tamanho; i++){
-            gene += caracteres.charAt( random.nextInt(2) );
+            gene += caracteres.charAt(GeradorRandomico.obtemIndiceDeCaracterRandomico());
         }
 
         return gene;
