@@ -86,11 +86,11 @@ public class CalculadoraGenetica {
     }
 
     public void criaCrossoverMutado(Populacao populacao, Integer comprimento, Integer numeroGenes){
-        List<Cromossomo> novosCromossomos = new ArrayList<Cromossomo>();
+        //List<Cromossomo> novosCromossomos = new ArrayList<Cromossomo>();
         Random random = new Random();
         List<Integer> index = obterPopulacaoParaCrossOver(this.geraVetorRandomico(populacao.getTamanhoDaPopulacao()), populacao);
-        this.criaCrossover(populacao, novosCromossomos, this.numeroRandomicoParaRetornoDeK(comprimento, numeroGenes).intValue(), index);
-        //this.mutacao(novosCromossomos);
+        this.criaCrossover(populacao, this.numeroRandomicoParaRetornoDeK(comprimento, numeroGenes).intValue(), index);
+        this.mutacao(Arrays.asList(populacao.getIndividuo()));
     }
 
     private List<Integer> obterPopulacaoParaCrossOver(BigDecimal[] rand, Populacao populacao) {
@@ -104,22 +104,15 @@ public class CalculadoraGenetica {
         return index;
     }
 
-    public ArrayList<Cromossomo> separaMelhores(List<Cromossomo> lista){
-        ArrayList<Cromossomo> listaCromossomo = new ArrayList<Cromossomo>();
-        for (int i = 0; i < TOTAL_MELHORES; i++) {
-            listaCromossomo.add(lista.get(i));
-        }
-        return listaCromossomo;
-    }
+    private void criaCrossover(Populacao populacao, Integer randomK, List<Integer> index) {
 
-    private void criaCrossover(Populacao populacao, List<Cromossomo> novosCromossomos, Integer randomK, List<Integer> index) {
-
-        for(int i = 0; i < index.size(); i++){
+        for(int i = 0; i < index.size(); i = i + 2){
             Cromossomo cromossomo = populacao.getIndividuo()[index.get(i)];
-            geraCrossover(cromossomo, populacao.getIndividuo()[index.get(i) + 1], randomK);
-            //cromossomo.setErro(Math.abs((c.getDcromossomo()*c.getDcromossomo())-5));
-            i++;
-            novosCromossomos.add(cromossomo);
+
+            if(index.size() % 2 == 0){
+                geraCrossover(cromossomo, populacao.getIndividuo()[index.get(i) + 1], randomK);
+            }
+
         }
     }
 
@@ -151,7 +144,7 @@ public class CalculadoraGenetica {
 
     private Double converteBinarioEmDecimal(String binario){
         Double valor = new Double(0);
-        // soma ao valor final o dígito binário da posição * 2 elevado ao contador da posição (começa em 0)
+        // soma ao valor final o dï¿½gito binï¿½rio da posiï¿½ï¿½o * 2 elevado ao contador da posiï¿½ï¿½o (comeï¿½a em 0)
         for (int i = binario.length() - 1; i >= 0; i--) {
             valor += Integer.parseInt( binario.charAt(i) + "" ) * Math.pow( 2, ((binario.length() -1) - i ) );
         }
@@ -211,7 +204,7 @@ public class CalculadoraGenetica {
             return "0";
         }
 
-        // enquanto o resultado da divisão por 2 for maior que 0 adiciona o resto ao início da String de retorno
+        // enquanto o resultado da divisï¿½o por 2 for maior que 0 adiciona o resto ao inï¿½cio da String de retorno
         while (valor > 0) {
             resto = valor % 2;
             valor = valor / 2;
