@@ -65,9 +65,10 @@ public class Cromossomo {
     }
 
     public String getIndividuo() {
+        this.individuo = "";
         for(int i = 0; i < this.genes.length; i++){
             this.individuo += this.genes[i].getGene();
-            this.individuo += " ";
+            //this.individuo += " ";
         }
 
         return individuo;

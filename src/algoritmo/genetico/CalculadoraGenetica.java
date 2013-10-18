@@ -106,13 +106,15 @@ public class CalculadoraGenetica {
         boolean paresNaoDefinidos = true;
         int tamanho = populacao.getTamanhoDaPopulacao() % 2 == 0 ? populacao.getTamanhoDaPopulacao() : populacao.getTamanhoDaPopulacao() - 1;
         int i = 0;
+        int contadorEmergencial = 0;
         while(tamanho > i || index.size() % 2 == 1){
             if(i > tamanho) return index;
             double numero;
 
             if(i == tamanho && index.size() % 2 == 1){
                 i--;
-                numero = rand[0].doubleValue();
+                numero = rand[contadorEmergencial].doubleValue();
+                contadorEmergencial++;
             } else {
                 numero = rand[i].doubleValue();
             }
@@ -133,19 +135,19 @@ public class CalculadoraGenetica {
             Cromossomo cromossomo = populacao.getIndividuo()[index.get(i)];
 
             if(index.size() % 2 == 0){
-                geraCrossover(cromossomo, populacao.getIndividuo()[index.get(i) + 1], randomK);
+                geraCrossover(populacao, i, randomK);
             }
 
         }
     }
 
-    private void geraCrossover(Cromossomo cromossomo, Cromossomo novo, Integer randomK){
+    private void geraCrossover(Populacao populacao, int i, Integer randomK){
 
-        String c1 = cromossomo.getIndividuo().substring(randomK);
-        String c2 = novo.getIndividuo().substring(randomK);
+        String c1 = populacao.getIndividuo()[i].getIndividuo().substring(randomK);
+        String c2 = populacao.getIndividuo()[i+1].getIndividuo().substring(randomK);
 
-        cromossomo.setIndividuo(cromossomo.getIndividuo().substring(0, randomK) + c2);
-        novo.setIndividuo(novo.getIndividuo().substring(0, randomK) + c1);
+        populacao.getIndividuo()[i].setIndividuo(populacao.getIndividuo()[i].getIndividuo().substring(0, randomK) + c2);
+        populacao.getIndividuo()[i+1].setIndividuo(populacao.getIndividuo()[i+1].getIndividuo().substring(0, randomK) + c1);
 
     }
 
