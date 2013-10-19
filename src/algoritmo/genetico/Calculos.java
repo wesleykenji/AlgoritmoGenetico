@@ -51,4 +51,20 @@ public class Calculos {
 
         return total;
     }
+
+    public Integer indiceDaMutacao(Integer indice, Integer comprimentoIndividuo) {
+
+        int validador = 1;
+        int index = indice - comprimentoIndividuo;
+        while(indice / comprimentoIndividuo != validador){
+            if(indice - comprimentoIndividuo < comprimentoIndividuo){
+                index = indice - comprimentoIndividuo;
+                break;
+            } else {
+                return indiceDaMutacao(indice - comprimentoIndividuo, comprimentoIndividuo);
+            }
+        }
+
+        return index;
+    }
 }

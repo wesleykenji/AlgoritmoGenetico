@@ -86,10 +86,11 @@ public class CalculadoraGenetica {
             qtdBitsLidos += comprimentoIndividuo * 2;
             somaBits += comprimentoIndividuo;
 
-            if(indice < somaBits) {
+            if(indice > somaBits) {
 
-                if(indice < qtdBitsLidos){
-                    contador = contador + 2;
+                if(indice > qtdBitsLidos){
+                    contador = indice / comprimentoIndividuo;
+                    qtdBitsLidos = comprimentoIndividuo * contador;
                 } else {
                     contador++;
                 }
@@ -97,12 +98,13 @@ public class CalculadoraGenetica {
                 continue;
             }
 
-            if(somaBits > indice){
-                mutacao[indice] = (mutacao[indice] == caracteres.charAt(0) ? caracteres.charAt(1) : caracteres.charAt(0));
-                populacao.getIndividuo()[contador].getIndividuo().toCharArray()[indice] = mutacao[indice];
+            if(somaBits >= indice){
+                int index = calculos.indiceDaMutacao(indice, comprimentoIndividuo);
+                mutacao[index] = (mutacao[index] == caracteres.charAt(0) ? caracteres.charAt(1) : caracteres.charAt(0));
+                populacao.getIndividuo()[contador].getIndividuo().toCharArray()[index] = mutacao[index];
             }
 
-            if(indice < somaBits){
+            if(indice <= somaBits){
                 i++;
             }
 
