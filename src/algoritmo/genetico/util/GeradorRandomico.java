@@ -38,9 +38,9 @@ public class GeradorRandomico {
 
     }
 
-    public static Map<Integer, Double> obterCaracterMutacao(Integer totalDeBits) {
+    public static SortedMap<Integer, Double> obterCaracterMutacao(Integer totalDeBits) {
         //REFATORAR MAPA
-        Map<Integer, Double> listaIndicesMutaveis = new HashMap<Integer, Double>();
+        SortedMap<Integer, Double> listaIndicesMutaveis = new TreeMap<Integer, Double>();
 
         for(int i = 0; i < totalDeBits; i++){
             Double gerado = random.nextDouble();

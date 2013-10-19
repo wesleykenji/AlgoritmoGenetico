@@ -70,24 +70,43 @@ public class CalculadoraGenetica {
         String caracteres = AlgoritmoUtils.CODIGO_BINARIO;
 
         Integer totalDeBits = calculos.obtemTotalBits(populacao.getTamanhoDaPopulacao(), numeroGenes, comprimento);
-        SortedMap<Integer, Double> indicesMutaveis = (SortedMap<Integer, Double>) GeradorRandomico.obterCaracterMutacao(totalDeBits);
+        SortedMap<Integer, Double> indicesMutaveis = GeradorRandomico.obterCaracterMutacao(totalDeBits);
         Integer contador = 0;
-        Integer[] indices = (Integer[]) indicesMutaveis.keySet().toArray();
+        Object[] indices = indicesMutaveis.keySet().toArray();
         Integer qtdBitsLidos = 0;
+        int i = 0;
+        int somaBits = 0;
 
-        for (int i = 0; i < populacao.getIndividuo().length; i++) {
-            Integer comprimentoIndividuo = populacao.getIndividuo()[i].getIndividuo().length();
+        while(indices.length > i) {
+
+            Integer comprimentoIndividuo = populacao.getIndividuo()[contador].getIndividuo().length();
+            char[] mutacao = populacao.getIndividuo()[contador].getIndividuo().toCharArray();
+            int indice = new Integer(indices[i].toString());
+
             qtdBitsLidos += comprimentoIndividuo * 2;
-            char[] mutacao = populacao.getIndividuo()[i].getIndividuo().toCharArray();
+            somaBits += comprimentoIndividuo;
 
-            if(comprimentoIndividuo > indices[i]){
-                mutacao[indices[i]] = (mutacao[indices[i]] == caracteres.charAt(0) ? caracteres.charAt(1) : caracteres.charAt(0));
-                populacao.getIndividuo()[i].getIndividuo().toCharArray()[indices[i]] = mutacao[indices[i]];
+            if(indice < somaBits) {
+
+                if(indice < qtdBitsLidos){
+                    contador = contador + 2;
+                } else {
+                    contador++;
+                }
+
+                continue;
             }
 
-            if(qtdBitsLidos < indices[i+1]){
+            if(somaBits > indice){
+                mutacao[indice] = (mutacao[indice] == caracteres.charAt(0) ? caracteres.charAt(1) : caracteres.charAt(0));
+                populacao.getIndividuo()[contador].getIndividuo().toCharArray()[indice] = mutacao[indice];
+            }
+
+            if(indice < somaBits){
                 i++;
             }
+
+            contador++;
         }
     }
 
