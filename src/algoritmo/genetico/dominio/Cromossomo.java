@@ -38,6 +38,7 @@ public class Cromossomo {
 
     public Cromossomo(String individuo, Integer comprimento, Integer numeroGenes){
         genes = new Genes[numeroGenes];
+        this.numeroGenes = numeroGenes;
         int posicaoInicial = 0;
         int posicaoFinal = comprimento;
 
@@ -76,6 +77,14 @@ public class Cromossomo {
 
     public void setIndividuo(String individuo) {
         this.individuo = individuo;
+        int inicio = 0;
+        int fim = individuo.length()/numeroGenes;
+
+        for (int i = 0; i < this.numeroGenes; i++){
+            this.getGenes()[i] = new Genes(individuo.length()/numeroGenes, individuo.substring(inicio, fim));
+            inicio = fim;
+            fim += fim;
+        }
     }
 
     public Double getCromossomoDouble() {

@@ -57,7 +57,10 @@ public class Calculos {
         int validador = 1;
         int index = indice - comprimentoIndividuo;
         while(indice / comprimentoIndividuo != validador){
-            if(indice - comprimentoIndividuo < comprimentoIndividuo){
+            if(indice / comprimentoIndividuo == 0){
+                index = indice;
+                break;
+            } else if(indice / comprimentoIndividuo == 1){
                 index = indice - comprimentoIndividuo;
                 break;
             } else {
