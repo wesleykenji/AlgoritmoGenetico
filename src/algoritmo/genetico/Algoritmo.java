@@ -10,16 +10,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wesleykenji
- * Date: 01/10/13
- * Time: 15:33
- * To change this template use File | Settings | File Templates.
- */
 public class Algoritmo implements AlgoritmoGenetico {
-
-    private RestricoesLaterais calculadora;
 
     @Override
     public Algoritmo calculaAlgoritmoGenetico(Integer numeroGenes, Integer tamanhoPopulacao, RestricoesLaterais restricoesLaterais, Integer comprimento) {
@@ -55,7 +46,7 @@ public class Algoritmo implements AlgoritmoGenetico {
         populacaoNova = calculadoraGenetica.criaCrossoverMutado(populacaoNova, comprimento, numeroGenes);
 
         //Teste de convergencia
-        resultadoAdaptacao = reproduzirEAdaptar(restricoesLaterais, comprimento, calculadoraGenetica, populacaoInicial, resultadoAdaptacao, resultPopInicial, mapPopulacao);
+        resultadoAdaptacao = reproduzirEAdaptar(restricoesLaterais, comprimento, calculadoraGenetica, populacaoNova, resultadoAdaptacao, resultPopInicial, mapPopulacao);
         JOptionPane.showMessageDialog(null, resultadoAdaptacao, "Resultado após todas as etapas", JOptionPane.INFORMATION_MESSAGE);
 
         return this;
