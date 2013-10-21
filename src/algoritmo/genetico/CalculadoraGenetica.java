@@ -69,7 +69,7 @@ public class CalculadoraGenetica {
 
         while(indices.length > i) {
 
-            int indice = 8;//new Integer(indices[i].toString());
+            int indice = new Integer(indices[i].toString());
             System.out.println("Indice a ser alterado na mutação: " + indice);
             //qtdBitsLidos += comprimentoIndividuo * 2;
 
