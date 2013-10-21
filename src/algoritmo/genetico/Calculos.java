@@ -19,7 +19,6 @@ public class Calculos {
     }
 
     public BigDecimal[] obtemValorDeMelhorResultado(BigDecimal resultadoAdaptacao, BigDecimal[] resultPopInicial) {
-        //TODO
         BigDecimal[] resultado = new BigDecimal[resultPopInicial.length];
 
         BigDecimal valor = BigDecimal.ZERO;
@@ -52,19 +51,20 @@ public class Calculos {
         return total;
     }
 
-    public Integer indiceDaMutacao(Integer indice, Integer comprimentoIndividuo) {
+    public Integer indiceDaMutacao(Integer indice, Integer tamanhoIndividuo) {
 
-        int validador = 1;
-        int index = indice - comprimentoIndividuo;
-        while(indice / comprimentoIndividuo != validador){
-            if(indice / comprimentoIndividuo == 0){
+        int validador = 0;
+        int index = new BigDecimal(indice - tamanhoIndividuo).abs().intValue();
+
+        while(indice / tamanhoIndividuo != validador){
+            if(indice / tamanhoIndividuo == 0){
                 index = indice;
                 break;
-            } else if(indice / comprimentoIndividuo == 1){
-                index = indice - comprimentoIndividuo;
+            } else if(indice / tamanhoIndividuo == 1){
+                index = indice - tamanhoIndividuo;
                 break;
             } else {
-                return indiceDaMutacao(indice - comprimentoIndividuo, comprimentoIndividuo);
+                return indiceDaMutacao(indice - tamanhoIndividuo, tamanhoIndividuo);
             }
         }
 

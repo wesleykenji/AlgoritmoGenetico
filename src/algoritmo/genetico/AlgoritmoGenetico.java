@@ -2,8 +2,6 @@ package algoritmo.genetico;
 
 import algoritmo.genetico.dominio.RestricoesLaterais;
 
-import java.math.BigDecimal;
-
 /**
  * Created with IntelliJ IDEA.
  * User: wesleykenji

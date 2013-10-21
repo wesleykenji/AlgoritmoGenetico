@@ -1,12 +1,7 @@
 package algoritmo.genetico.dominio;
 
-import algoritmo.genetico.Algoritmo;
 import algoritmo.genetico.util.AlgoritmoUtils;
 import algoritmo.genetico.util.GeradorRandomico;
-
-import java.math.BigDecimal;
-import java.util.Map;
-import java.util.Random;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +14,6 @@ public class Cromossomo {
 
     private Integer numeroGenes;
     private Genes[] genes;
-//    private final Integer TAMANHO_INDIVIDUO = 16;
     private String individuo = "";
     private Double cromossomoDouble;
 
@@ -30,7 +24,6 @@ public class Cromossomo {
         StringBuilder geneString = new StringBuilder();
 
         for(int i =0; i < numeroGenes; i++) {
-//            Integer tamanho = TAMANHO_INDIVIDUO / 2;
             genes[i] = new Genes(comprimento, criarGene(comprimento, AlgoritmoUtils.CODIGO_BINARIO));
         }
 
@@ -45,10 +38,9 @@ public class Cromossomo {
         for(int i = 0; i < numeroGenes; i++){
             genes[i] = new Genes(comprimento, individuo.substring(posicaoInicial, posicaoFinal));
             posicaoInicial += comprimento;
-            posicaoFinal += posicaoInicial;
+            posicaoFinal += comprimento;
         }
 
-        //TODO aplicar taxa de mutação
     }
 
     private String criarGene(Integer tamanho, String caracteres){
@@ -69,7 +61,6 @@ public class Cromossomo {
         this.individuo = "";
         for(int i = 0; i < this.genes.length; i++){
             this.individuo += this.genes[i].getGene();
-            //this.individuo += " ";
         }
 
         return individuo;
@@ -83,7 +74,7 @@ public class Cromossomo {
         for (int i = 0; i < this.numeroGenes; i++){
             this.getGenes()[i] = new Genes(individuo.length()/numeroGenes, individuo.substring(inicio, fim));
             inicio = fim;
-            fim += fim;
+            fim += individuo.length()/numeroGenes;
         }
     }
 

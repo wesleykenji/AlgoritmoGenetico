@@ -1,9 +1,10 @@
 package algoritmo.genetico.util;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
-import java.util.*;
+import java.util.Random;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,12 +35,7 @@ public class GeradorRandomico {
         return vetor;
     }
 
-    public static void gerarParesRandomicosMutacao(){
-
-    }
-
     public static SortedMap<Integer, Double> obterCaracterMutacao(Integer totalDeBits) {
-        //REFATORAR MAPA
         SortedMap<Integer, Double> listaIndicesMutaveis = new TreeMap<Integer, Double>();
 
         for(int i = 0; i < totalDeBits; i++){

@@ -5,8 +5,8 @@ import algoritmo.genetico.dominio.Populacao;
 import algoritmo.genetico.dominio.RestricoesLaterais;
 import algoritmo.genetico.util.GeradorRandomico;
 
+import javax.swing.*;
 import java.math.BigDecimal;
-import java.text.Bidi;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,11 +28,13 @@ public class Algoritmo implements AlgoritmoGenetico {
 
         //Criar Populacao inicial
         Populacao populacaoInicial = new Populacao(numeroGenes, tamanhoPopulacao, comprimento);
+        StringBuilder builder = new StringBuilder();
         for(int i = 0; i < populacaoInicial.getIndividuo().length; i++){
             int contador = i + 1;
             System.out.println("Cinicial" + contador + ":" + populacaoInicial.getIndividuo()[i].getIndividuo());
+            builder.append("Cinicial" + contador + ":" + populacaoInicial.getIndividuo()[i].getIndividuo() + " \n");
         }
-
+        JOptionPane.showMessageDialog(null, builder.toString(), "Populacao Inicial", JOptionPane.INFORMATION_MESSAGE);
         //Criar populacao das gerações
         /*Populacao populacao = new Populacao(numeroGenes,CalculadoraGenetica.getTotalCromossomos());
         for(int i = 0; i < populacaoInicial.getIndividuo().length; i++){
@@ -45,33 +47,27 @@ public class Algoritmo implements AlgoritmoGenetico {
         Map<Integer, Cromossomo> mapPopulacao = new HashMap<Integer,Cromossomo>();
 
         resultadoAdaptacao = reproduzirEAdaptar(restricoesLaterais, comprimento, calculadoraGenetica, populacaoInicial, resultadoAdaptacao, resultPopInicial, mapPopulacao);
-        //System.out.println(resultadoAdaptacao);
+        JOptionPane.showMessageDialog(null, resultadoAdaptacao, "Resultado antes de algumas etapas", JOptionPane.INFORMATION_MESSAGE);
         //Melhores Resultados
-        //BigDecimal[] probabilidade = calculadoraGenetica.obtemValorDeMelhorResultado(resultadoAdaptacao, resultPopInicial);
         Populacao populacaoNova = calculadoraGenetica.separaMelhores(GeradorRandomico.geraVetorRandomico(tamanhoPopulacao),resultadoAdaptacao, resultPopInicial, mapPopulacao);
 
         //Cruzamento e mutação
         populacaoNova = calculadoraGenetica.criaCrossoverMutado(populacaoNova, comprimento, numeroGenes);
+
         //Teste de convergencia
         resultadoAdaptacao = reproduzirEAdaptar(restricoesLaterais, comprimento, calculadoraGenetica, populacaoInicial, resultadoAdaptacao, resultPopInicial, mapPopulacao);
+        JOptionPane.showMessageDialog(null, resultadoAdaptacao, "Resultado após todas as etapas", JOptionPane.INFORMATION_MESSAGE);
 
         return this;
     }
 
     private BigDecimal reproduzirEAdaptar(RestricoesLaterais restricoesLaterais, Integer comprimento, CalculadoraGenetica calculadoraGenetica, Populacao populacaoInicial, BigDecimal resultadoAdaptacao, BigDecimal[] resultPopInicial, Map<Integer, Cromossomo> mapPopulacao) {
         for(int i = 0; i < populacaoInicial.getIndividuo().length; i++){
-            //Avaliar Custos
-
             //Reprodução e adaptação
-            //BigDecimal resultado = calculadoraGenetica.reproducaoEAdaptacao(populacao.getIndividuo()[i].getGenes(), new RestricoesLaterais(xu, xl), comprimento));
             BigDecimal[] genesAdaptacao = new BigDecimal[populacaoInicial.getIndividuo()[i].getGenes().length];
             String gene = calculadoraGenetica.reproducao(populacaoInicial.getIndividuo()[i].getGenes(), restricoesLaterais, comprimento, genesAdaptacao);
 
-            //System.out.println("Gene após reprodução: " + gene);
-
             resultPopInicial[i] = calculadoraGenetica.adaptacao(genesAdaptacao);
-
-            //System.out.println("valor da adaptação: " + resultPopInicial[i]);
 
             populacaoInicial.getIndividuo()[i].setCromossomoDouble(resultPopInicial[i].doubleValue());
             mapPopulacao.put(i, populacaoInicial.getIndividuo()[i]);

@@ -1,7 +1,5 @@
 package algoritmo.genetico;
 
-import java.util.*;
-
 import algoritmo.genetico.dominio.Cromossomo;
 import algoritmo.genetico.dominio.Genes;
 import algoritmo.genetico.dominio.Populacao;
@@ -11,6 +9,10 @@ import algoritmo.genetico.util.GeradorRandomico;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -74,12 +76,12 @@ public class CalculadoraGenetica {
 
         while(indices.length > i) {
 
-            int indice = 80;//new Integer(indices[i].toString());
+            int indice = 8;//new Integer(indices[i].toString());
             System.out.println("Indice a ser alterado na mutação: " + indice);
             //qtdBitsLidos += comprimentoIndividuo * 2;
 
-            if(indice / comprimentoIndividuo > 1 && somaBits < totalDeBits){
-                contador = indice / comprimentoIndividuo - 1;
+            if(indice / comprimentoIndividuo > 1 && indice - somaBits > comprimentoIndividuo){
+                contador = indice / comprimentoIndividuo;
                 qtdBitsLidos = comprimentoIndividuo * (contador + 1);
                 somaBits += comprimentoIndividuo * (contador + 1);
             } else if(indice / comprimentoIndividuo == 1){
@@ -92,7 +94,14 @@ public class CalculadoraGenetica {
             if(indice > somaBits) continue;
 
             if(somaBits >= indice){
-                populacao.getIndividuo()[contador] = mutar(populacao.getIndividuo()[contador], caracteres, comprimento, indice);
+                int index = calculos.indiceDaMutacao(indice, populacao.getIndividuo()[contador].getIndividuo().length());
+
+                if(index == 0){
+                    contador--;
+                    index = populacao.getIndividuo()[contador].getIndividuo().length();
+                }
+
+                populacao.getIndividuo()[contador] = mutar(populacao.getIndividuo()[contador], caracteres, comprimento, index);
             }
 
             if(indice <= somaBits){
@@ -112,12 +121,8 @@ public class CalculadoraGenetica {
         return populacao;
     }
 
-    private Cromossomo mutar(Cromossomo cromossomo, String caracteres, Integer comprimento, int indice) {
-        int index = calculos.indiceDaMutacao(indice, comprimento);
+    private Cromossomo mutar(Cromossomo cromossomo, String caracteres, Integer comprimento, int index) {
 
-        if(index == 0){
-            index = cromossomo.getIndividuo().length();
-        }
         System.out.println("mutar no indice " +  (index - 1) + " do cromossomo " + cromossomo.getIndividuo());
 
         char[] mutacao = cromossomo.getIndividuo().toCharArray();
@@ -130,24 +135,28 @@ public class CalculadoraGenetica {
     }
 
     public Populacao criaCrossoverMutado(Populacao populacao, Integer comprimento, Integer numeroGenes){
-        //List<Cromossomo> novosCromossomos = new ArrayList<Cromossomo>();
         System.out.println("Iniciando processo de Crossover . . .");
+
         List<Integer> index = obterPopulacaoParaCrossOver(GeradorRandomico.geraVetorRandomico(populacao.getTamanhoDaPopulacao()), populacao);
+
         System.out.println("Tamanho da populacao a ser feita crossover: " + index.size());
-        for(int i = 0; i < populacao.getIndividuo().length; i++){
+
+        /*for(int i = 0; i < populacao.getIndividuo().length; i++){
             int contador = i + 1;
             System.out.println("C antes do crossover" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
-        }
+        } */
+
         populacao = this.criaCrossover(populacao, GeradorRandomico.numeroRandomicoParaRetornoDeK(comprimento, numeroGenes).intValue(), index);
-        for(int i = 0; i < populacao.getIndividuo().length; i++){
+        /*for(int i = 0; i < populacao.getIndividuo().length; i++){
             int contador = i + 1;
             System.out.println("C depois do crossover" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
-        }
+        }   */
+
         populacao = this.mutacao(populacao, numeroGenes, comprimento);
-        for(int i = 0; i < populacao.getIndividuo().length; i++){
+        /*for(int i = 0; i < populacao.getIndividuo().length; i++){
             int contador = i + 1;
             System.out.println("C depois da mutacao" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
-        }
+        } */
 
         System.out.println("Finalizando Mutação e Crossover");
         return populacao;
@@ -156,10 +165,11 @@ public class CalculadoraGenetica {
     private List<Integer> obterPopulacaoParaCrossOver(BigDecimal[] rand, Populacao populacao) {
         List<Integer> index = new ArrayList<Integer>();
         boolean paresNaoDefinidos = true;
-        int tamanho = populacao.getTamanhoDaPopulacao() % 2 == 0 ? populacao.getTamanhoDaPopulacao() : populacao.getTamanhoDaPopulacao() - 1;
+        int tamanho = populacao.getTamanhoDaPopulacao() % 2 != 0 ? populacao.getTamanhoDaPopulacao() : populacao.getTamanhoDaPopulacao() - 1;
         int i = 0;
         int contadorEmergencial = 0;
-        while(tamanho > i || index.size() % 2 == 1){
+
+        while(i < tamanho - 1 || index.size() % 2 == 1){
             if(i > tamanho) return index;
             double numero;
 
@@ -196,19 +206,24 @@ public class CalculadoraGenetica {
     }
 
     private Populacao geraCrossover(Populacao populacao, int i, Integer randomK){
+
         System.out.println("Iniciando crossover do par " + i + " e " + (i+1) + " com equivalente k = " + randomK);
+
         String c1 = populacao.getIndividuo()[i].getIndividuo().substring(randomK);
         String c2 = populacao.getIndividuo()[i+1].getIndividuo().substring(randomK);
 
         populacao.getIndividuo()[i].setIndividuo(populacao.getIndividuo()[i].getIndividuo().substring(0, randomK) + c2);
         populacao.getIndividuo()[i+1].setIndividuo(populacao.getIndividuo()[i+1].getIndividuo().substring(0, randomK) + c1);
+
         System.out.println("Crossover do par concluído!");
 
         return populacao;
     }
 
     public Populacao separaMelhores(BigDecimal[] vetorRand, BigDecimal resultadoAdaptacao, BigDecimal[] resultPopInicial, Map<Integer, Cromossomo> individuo) {
+
         System.out.println("Obtendo os Melhores cromossomos . . .");
+
         int contador = 0;
         Cromossomo[] cromossomos = new Cromossomo[individuo.size()];
         BigDecimal[] probabilidade = calculos.obtemValorDeMelhorResultado(resultadoAdaptacao, resultPopInicial);
@@ -217,6 +232,7 @@ public class CalculadoraGenetica {
             cromossomos[contador] = compareEObtenhaOMelhor(vetorRand[contador], probabilidade, individuo);
             contador++;
         }
+
         System.out.println("Retornando melhores cromossomos como uma nova população");
         return new Populacao(cromossomos);
     }
@@ -237,6 +253,15 @@ public class CalculadoraGenetica {
 
         individuo.get(i).setCromossomoDouble(probabilidade[i].doubleValue());
 
-        return individuo.get(i);
+        return populaCromossomo(individuo.get(i));
+    }
+
+    private Cromossomo populaCromossomo(Cromossomo cromossomo) {
+        Integer numeroGenes = cromossomo.getGenes().length;
+        Integer comprimento = cromossomo.getGenes()[0].getGene().length();
+
+        Cromossomo cromossomoNovo = new Cromossomo(cromossomo.getIndividuo(), comprimento, numeroGenes);
+        cromossomoNovo.setCromossomoDouble(cromossomo.getCromossomoDouble());
+        return cromossomoNovo;
     }
 }
