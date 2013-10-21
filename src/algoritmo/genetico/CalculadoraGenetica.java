@@ -187,7 +187,7 @@ public class CalculadoraGenetica {
             Cromossomo cromossomo = populacao.getIndividuo()[index.get(i)];
 
             if(index.size() % 2 == 0){
-                populacao = geraCrossover(populacao, i, randomK);
+                populacao = geraCrossover(populacao, index.get(i), randomK);
             }
 
         }
