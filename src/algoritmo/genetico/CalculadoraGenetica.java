@@ -134,22 +134,22 @@ public class CalculadoraGenetica {
 
         System.out.println("Tamanho da populacao a ser feita crossover: " + index.size());
 
-        /*for(int i = 0; i < populacao.getIndividuo().length; i++){
+        for(int i = 0; i < populacao.getIndividuo().length; i++){
             int contador = i + 1;
             System.out.println("C antes do crossover" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
-        } */
+        }
 
         populacao = this.criaCrossover(populacao, GeradorRandomico.numeroRandomicoParaRetornoDeK(comprimento, numeroGenes).intValue(), index);
-        /*for(int i = 0; i < populacao.getIndividuo().length; i++){
+        for(int i = 0; i < populacao.getIndividuo().length; i++){
             int contador = i + 1;
             System.out.println("C depois do crossover" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
-        }   */
+        }
 
         populacao = this.mutacao(populacao, numeroGenes, comprimento);
-        /*for(int i = 0; i < populacao.getIndividuo().length; i++){
+        for(int i = 0; i < populacao.getIndividuo().length; i++){
             int contador = i + 1;
             System.out.println("C depois da mutacao" + contador + ":" + populacao.getIndividuo()[i].getIndividuo());
-        } */
+        }
 
         System.out.println("Finalizando Mutação e Crossover");
         return populacao;

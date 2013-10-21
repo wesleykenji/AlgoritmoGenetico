@@ -38,7 +38,7 @@ public class Algoritmo implements AlgoritmoGenetico {
         Map<Integer, Cromossomo> mapPopulacao = new HashMap<Integer,Cromossomo>();
 
         resultadoAdaptacao = reproduzirEAdaptar(restricoesLaterais, comprimento, calculadoraGenetica, populacaoInicial, resultadoAdaptacao, resultPopInicial, mapPopulacao);
-        JOptionPane.showMessageDialog(null, resultadoAdaptacao, "Resultado antes de algumas etapas", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, resultadoAdaptacao, "Resultado antes de algumas etapas (fx objetiva)", JOptionPane.INFORMATION_MESSAGE);
         //Melhores Resultados
         Populacao populacaoNova = calculadoraGenetica.separaMelhores(GeradorRandomico.geraVetorRandomico(tamanhoPopulacao),resultadoAdaptacao, resultPopInicial, mapPopulacao);
 
@@ -47,7 +47,7 @@ public class Algoritmo implements AlgoritmoGenetico {
 
         //Teste de convergencia
         resultadoAdaptacao = reproduzirEAdaptar(restricoesLaterais, comprimento, calculadoraGenetica, populacaoNova, resultadoAdaptacao, resultPopInicial, mapPopulacao);
-        JOptionPane.showMessageDialog(null, resultadoAdaptacao, "Resultado após todas as etapas", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, resultadoAdaptacao, "Resultado após todas as etapas (fx objetiva)", JOptionPane.INFORMATION_MESSAGE);
 
         return this;
     }
