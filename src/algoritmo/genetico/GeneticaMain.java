@@ -5,13 +5,6 @@ import algoritmo.genetico.dominio.RestricoesLaterais;
 import javax.swing.*;
 import java.math.BigDecimal;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wesleykenji
- * Date: 30/09/13
- * Time: 22:43
- * To change this template use File | Settings | File Templates.
- */
 public class GeneticaMain {
 
     public static void main(String[] args){

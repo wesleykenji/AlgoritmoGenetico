@@ -1,12 +1,5 @@
 package algoritmo.genetico.dominio;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wesleykenji
- * Date: 01/10/13
- * Time: 15:11
- * To change this template use File | Settings | File Templates.
- */
 public class Populacao {
 
     private Cromossomo[] individuo;

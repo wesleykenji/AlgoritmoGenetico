@@ -14,13 +14,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wesleykenji
- * Date: 30/09/13
- * Time: 22:31
- * To change this template use File | Settings | File Templates.
- */
 public class CalculadoraGenetica {
 
     private Calculos calculos;

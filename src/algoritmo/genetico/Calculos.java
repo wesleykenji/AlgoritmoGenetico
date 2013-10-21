@@ -5,13 +5,6 @@ import algoritmo.genetico.dominio.RestricoesLaterais;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wesley.oyama
- * Date: 18/10/13
- * Time: 11:22
- * To change this template use File | Settings | File Templates.
- */
 public class Calculos {
 
     public Integer obtemTotalBits(Integer tamanhoPopulacao, Integer numeroGenes, Integer comprimento){

@@ -6,13 +6,6 @@ import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wesley.oyama
- * Date: 18/10/13
- * Time: 11:14
- * To change this template use File | Settings | File Templates.
- */
 public class GeradorRandomico {
 
     private static Random random;

@@ -3,13 +3,6 @@ package algoritmo.genetico.dominio;
 import algoritmo.genetico.util.AlgoritmoUtils;
 import algoritmo.genetico.util.GeradorRandomico;
 
-/**
- * Created with IntelliJ IDEA.
- * User: wesleykenji
- * Date: 30/09/13
- * Time: 22:29
- * To change this template use File | Settings | File Templates.
- */
 public class Cromossomo {
 
     private Integer numeroGenes;
